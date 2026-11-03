@@ -12,6 +12,7 @@ import 'package:anime_flow/app/app_version.dart';
 import 'package:anime_flow/core/constants/assets_path_constants.dart';
 import 'package:anime_flow/features/user/presentation/widgets/collection_sync_lifecycle.dart';
 import 'package:anime_flow/features/auth/presentation/widgets/oauth_notice_listener.dart';
+import 'package:flutter/services.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -25,15 +26,41 @@ class MyApp extends StatelessWidget {
         final fontFamily = themeState.fontFamily;
         return MaterialApp.router(
           key: ValueKey(fontFamily),
-          // debugShowCheckedModeBanner: false,
           routerConfig: appRouter,
-          theme: buildLightTheme(themeState.seedColor, fontFamily: fontFamily),
+          theme: buildLightTheme(themeState.seedColor, fontFamily: fontFamily)
+              .copyWith(
+            focusColor: Colors.blue.withOpacity(0.4),
+            hoverColor: Colors.blue.withOpacity(0.2),
+            highlightColor: Colors.blue.withOpacity(0.3),
+            splashColor: Colors.blue.withOpacity(0.2),
+            visualDensity: VisualDensity.comfortable,
+          ),
           darkTheme:
-              buildDarkTheme(themeState.seedColor, fontFamily: fontFamily),
+              buildDarkTheme(themeState.seedColor, fontFamily: fontFamily)
+                  .copyWith(
+            focusColor: Colors.blue.withOpacity(0.5),
+            hoverColor: Colors.blue.withOpacity(0.3),
+            highlightColor: Colors.blue.withOpacity(0.4),
+            splashColor: Colors.blue.withOpacity(0.3),
+            visualDensity: VisualDensity.comfortable,
+          ),
           themeMode: themeState.themeMode,
           locale: locale,
           localizationsDelegates: appLocalizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
+          shortcuts: {
+            LogicalKeySet(LogicalKeyboardKey.arrowUp):
+                const DirectionalFocusIntent(TraversalDirection.up),
+            LogicalKeySet(LogicalKeyboardKey.arrowDown):
+                const DirectionalFocusIntent(TraversalDirection.down),
+            LogicalKeySet(LogicalKeyboardKey.arrowLeft):
+                const DirectionalFocusIntent(TraversalDirection.left),
+            LogicalKeySet(LogicalKeyboardKey.arrowRight):
+                const DirectionalFocusIntent(TraversalDirection.right),
+            LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
+            LogicalKeySet(LogicalKeyboardKey.enter): const ActivateIntent(),
+            LogicalKeySet(LogicalKeyboardKey.space): const ActivateIntent(),
+          },
           builder: (context, child) {
             var body = BotToastInit()(context, child);
             body = AppVersionUpdateListener(child: body);
