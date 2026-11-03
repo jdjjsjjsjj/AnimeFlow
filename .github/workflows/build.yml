@@ -21,8 +21,8 @@ on:
         default: all
 
 env:
-  ANIME_FLOW_APP_ID: ${{ secrets.ANIME_FLOW_APP_ID }}
-  ANIME_FLOW_SECRET: ${{ secrets.ANIME_FLOW_SECRET }}
+  ANIME_FLOW_APP_ID: ${{ secrets.ANIME_FLOW_APP_ID || '' }}
+  ANIME_FLOW_SECRET: ${{ secrets.ANIME_FLOW_SECRET || '' }}
 
 jobs:
   quality:
@@ -105,7 +105,7 @@ jobs:
     needs: quality
     if: >-
       github.event_name != 'merge_group' &&
-      (github.event_name != 'push' || github.ref == 'refs/heads/main') &&
+       (github.event_name != 'push') &&
       (github.event_name != 'workflow_dispatch' || inputs.platform == 'all' || inputs.platform == 'android')
     runs-on: ubuntu-latest
     timeout-minutes: 120
