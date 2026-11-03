@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:flutter/widgets.dart';
 import 'package:anime_flow/app/app.dart';
 import 'composition/video_source_bindings.dart';
 import 'package:anime_flow/app/router/go_app_navigator.dart';
@@ -73,6 +74,11 @@ Future<void> bootstrap() async {
   container.read(appInfoProvider);
   unawaited(container.read(shadersDirectoryProvider.future));
   unawaited(SourceConfigInitializer().initialize());
+
+  // Enable TV-style focus highlight (visible D-pad navigation indicator)
+  if (Platform.isAndroid) {
+    FocusManager.instance.highlightMode = FocusHighlightMode.traditional;
+  }
 
   runApp(
     UncontrolledProviderScope(
